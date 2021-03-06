@@ -53,7 +53,7 @@ func (c ClassDef) String() string {
 }
 
 type Field struct {
-	symbol    uint8
+	symbol    int
 	flags     FieldFlag
 	value     int
 	valueType DataType
@@ -114,7 +114,7 @@ func parseData(p *PRG, t SecType, length int, data []byte) *DataSection {
 
 		for j := 0; j < int(cdef.nFields); j++ {
 			field := Field{
-				symbol:    uint8(data[i+(j*8)+25]),
+				symbol:    int(binary.BigEndian.Uint32(data[i+(j*8)+23:i+(j*8)+27]) >> 8),
 				flags:     FieldFlag(data[i+(j*8)+26] >> 4),
 				value:     int(binary.BigEndian.Uint32(data[i+(j*8)+27 : i+(j*8)+31])),
 				valueType: DataType(data[i+(j*8)+26] & 0x0F),
